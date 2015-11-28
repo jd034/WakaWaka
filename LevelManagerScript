@@ -1,0 +1,35 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+public class LevelManagerScript : MonoBehaviour {
+
+	public Text quartersLabel;
+	public int startingAmount;
+
+	private int quarters;
+
+	public int Quarters 
+	{
+		get 
+		{ 
+			return quarters;
+		}
+		set 
+		{
+			quarters = value;
+			quartersLabel.GetComponent<Text>().text = "(Q): " + quarters;
+		}
+	}
+
+	
+	void Start () 
+	{
+		this.Quarters = startingAmount;
+	}
+
+	void Update () 
+	{
+	
+	}
+}
