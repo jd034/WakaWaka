@@ -1,0 +1,22 @@
+using UnityEngine;
+using System.Collections;
+
+public class SpriteAnimator : MonoBehaviour {
+
+	public Sprite[] array_sprites;
+	public float flt_framesPerSecond;
+	private SpriteRenderer pfv_spriteRenderer;
+	
+	
+	void Start () 
+	{
+		pfv_spriteRenderer = renderer as SpriteRenderer;
+	}
+	
+	void Update () 
+	{
+		int index = (int)(Time.timeSinceLevelLoad * flt_framesPerSecond);
+		index = index % array_sprites.Length;
+		pfv_spriteRenderer.sprite = array_sprites[index];
+	}
+}
