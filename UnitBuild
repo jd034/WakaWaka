@@ -1,0 +1,118 @@
+using UnityEngine;
+using System.Collections;
+
+public class UnitBuild : MonoBehaviour {
+	public GameObject tester;
+	private GameObject unit;
+	public GameObject unit1Prefab;
+	public GameObject unit2Prefab;
+	public GameObject unit3Prefab;
+	public GameObject unit4Prefab;
+	public GameObject unit5Prefab;
+
+	private LevelManagerScript levelManager;
+
+	void Start()
+	{
+		levelManager = GameObject.Find("LevelManager").GetComponent<LevelManagerScript>();
+	}
+
+	private bool canBuildUnit() 
+	{
+		if (tester.GetComponent<UnitButtons> ().getUnitType () == 1) 
+		{
+			int unitCost = unit1Prefab.GetComponent<UnitData> ().unitlevels [0].cost;
+			return unit == null && levelManager.Quarters >= unitCost;
+		} 
+		else if (tester.GetComponent<UnitButtons> ().getUnitType () == 2) 
+		{
+			int unitCost = unit2Prefab.GetComponent<UnitData> ().unitlevels [0].cost;
+			return unit == null && levelManager.Quarters >= unitCost;
+		} 
+		else if (tester.GetComponent<UnitButtons> ().getUnitType () == 3) 
+		{
+			int unitCost = unit3Prefab.GetComponent<UnitData> ().unitlevels [0].cost;
+			return unit == null && levelManager.Quarters >= unitCost;
+		}
+		else if (tester.GetComponent<UnitButtons> ().getUnitType () == 4) 
+		{
+			int unitCost = unit4Prefab.GetComponent<UnitData> ().unitlevels [0].cost;
+			return unit == null && levelManager.Quarters >= unitCost;
+		} 
+		else if (tester.GetComponent<UnitButtons> ().getUnitType () == 5) 
+		{
+			int unitCost = unit5Prefab.GetComponent<UnitData> ().unitlevels [0].cost;
+			return unit == null && levelManager.Quarters >= unitCost;
+		} 
+		else 
+		{
+			return false;
+		}
+
+	}
+
+	void OnMouseUp () 
+	{
+		if (canBuildUnit ()) 
+		{
+			if(tester.GetComponent<UnitButtons>().getUnitType() == 1)
+			{
+				unit = (GameObject) Instantiate(unit1Prefab, transform.position, Quaternion.identity);
+				AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+				audioSource.PlayOneShot(audioSource.clip);
+			}
+			else if(tester.GetComponent<UnitButtons>().getUnitType() == 2)
+			{
+				unit = (GameObject) Instantiate(unit2Prefab, transform.position, Quaternion.identity);
+				AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+				audioSource.PlayOneShot(audioSource.clip);
+			}
+			else if(tester.GetComponent<UnitButtons>().getUnitType() == 3)
+			{
+				unit = (GameObject) Instantiate(unit3Prefab, transform.position, Quaternion.identity);
+				AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+				audioSource.PlayOneShot(audioSource.clip);
+			}
+			else if(tester.GetComponent<UnitButtons>().getUnitType() == 4)
+			{
+				unit = (GameObject) Instantiate(unit4Prefab, transform.position, Quaternion.identity);
+				AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+				audioSource.PlayOneShot(audioSource.clip);
+			}
+			else if(tester.GetComponent<UnitButtons>().getUnitType() == 5)
+			{
+				unit = (GameObject) Instantiate(unit5Prefab, transform.position, Quaternion.identity);
+				AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+				audioSource.PlayOneShot(audioSource.clip);
+			}
+			
+			levelManager.Quarters -= unit.GetComponent<UnitData>().CurrentLevel.cost;
+
+		}
+		 else if (canUpgradeUnit1()) 
+		{
+			unit.GetComponent<UnitData>().increaseLevel();
+			AudioSource audioSource = gameObject.GetComponent<AudioSource>();
+			audioSource.PlayOneShot(audioSource.clip);
+
+			levelManager.Quarters -= unit.GetComponent<UnitData>().CurrentLevel.cost;
+
+		}
+
+	}
+
+	private bool canUpgradeUnit1() 
+	{
+		if (unit != null) 
+		{
+			UnitData unit1data = unit.GetComponent<UnitData> ();
+			UnitLevel nextLevel = unit1data.getNextLevel();
+			if (nextLevel != null) 
+			{
+				return levelManager.Quarters >= nextLevel.cost;
+			}
+		}
+		return false;
+	}
+
+}
