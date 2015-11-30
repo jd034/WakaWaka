@@ -1,0 +1,75 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class UnitLevel {
+	public int cost;
+	public int damage;
+	public int rateOfFire;
+	public GameObject visualization;
+}
+
+public class UnitData : MonoBehaviour {
+
+	public List<UnitLevel> unitlevels;
+	private UnitLevel currentLevel;
+
+	public UnitLevel CurrentLevel 
+	{
+		get 
+		{
+			return currentLevel;
+		}
+
+		set 
+		{
+			currentLevel = value;
+			int currentLevelIndex = unitlevels.IndexOf(currentLevel);
+			
+			GameObject levelVisualization = unitlevels[currentLevelIndex].visualization;
+			for (int index = 0; index < unitlevels.Count; index++) {
+				if (levelVisualization != null) 
+				{
+					if (index == currentLevelIndex) 
+					{
+						unitlevels[index].visualization.SetActive(true);
+					} 
+					else 
+					{
+						unitlevels[index].visualization.SetActive(false);
+					}
+				}
+			}
+		}
+	}
+
+	void OnEnable() {
+		CurrentLevel = unitlevels[0];
+	}
+
+	public UnitLevel getNextLevel() {
+		int currentLevelIndex = unitlevels.IndexOf (currentLevel);
+		int maxLevelIndex = unitlevels.Count - 1;
+		if (currentLevelIndex < maxLevelIndex) 
+		{
+			return unitlevels[currentLevelIndex+1];
+		} 
+		else 
+		{
+			return null;
+		}
+	}
+
+	public void increaseLevel() 
+	{
+		int currentLevelIndex = unitlevels.IndexOf(currentLevel);
+		if (currentLevelIndex < unitlevels.Count - 1) 
+		{
+			CurrentLevel = unitlevels[currentLevelIndex + 1];
+		}
+	}
+
+
+
+}
