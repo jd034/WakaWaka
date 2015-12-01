@@ -1,0 +1,50 @@
+using UnityEngine;
+using System.Collections;
+
+public class SFXScript : MonoBehaviour {
+
+	public GameObject SFXOnActive;
+	public GameObject SFXOffActive;
+	public int SFXStatus = 2;
+	public int SFXtemp;
+	
+	void Start () 
+	{
+		SFXtemp = PlayerPrefs.GetInt ("SFXOption");
+		if (SFXtemp > 0) 
+		{
+			SFXStatus = SFXtemp;
+			this.checkStatus();
+		}
+	}
+	
+	private void checkStatus()
+	{
+		if (SFXStatus == 2) 
+		{
+			SFXOnActive.SetActive(true);
+			SFXOffActive.SetActive (false);
+			PlayerPrefs.SetInt("SFXOption", 2);
+		} 
+		else 
+		{
+			SFXOffActive.SetActive(true);
+			SFXOnActive.SetActive (false);
+			PlayerPrefs.SetInt("SFXOption", 1);
+		}
+	}
+	
+	public void onClick(int in_value)
+	{
+		if (SFXStatus == 2 && in_value == 1) 
+		{
+			SFXStatus = 1;
+			this.checkStatus();
+		} 
+		else if(SFXStatus == 1 && in_value == 2)
+		{
+			SFXStatus = 2;
+			this.checkStatus();
+		}
+	}
+}
