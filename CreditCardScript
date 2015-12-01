@@ -1,0 +1,75 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+/******************************************************
+***  Binary234
+***  Stephen Tilzey
+******************************************************
+*** This class handles the saving and loading of the player's credit card
+******************************************************
+*** 30 November 2015
+******************************************************/
+
+public class CreditCardScript : MonoBehaviour {
+	
+	//Class Variables
+	public GameObject cardAddedLabel;
+	public InputField textBox1;
+	public InputField textBox2;
+	public Text nameTextBox;
+	public Text numTextBox;
+	public Text nameC;
+	public Text numberC;
+	public string cardname = "";
+	public string cardnumber = "";
+
+	/******************************************************
+    ***  Start()
+    ***  Stephen Tilzey
+    ******************************************************
+    *** Purpose: Checks to determine if credit card has already been saved, if so, load it.
+    *** Method Inputs: None
+    *** Return value: Void
+    ******************************************************
+    *** 24 November 2015
+    ******************************************************/	
+	void Start()
+	{
+		cardname = PlayerPrefs.GetString("CreditName");
+		cardnumber = PlayerPrefs.GetString("CreditNumber");
+		if (cardname != "") 
+		{
+			cardAddedLabel.SetActive(false);
+			nameTextBox.text.Insert(0, cardname);
+			numTextBox.text = cardnumber;
+			nameC.text = cardname;
+			numberC.text = cardnumber;
+			textBox1.interactable = false;
+			textBox2.interactable = false;
+		}
+	}
+
+	/******************************************************
+    ***  AddCard()
+    ***  Stephen Tilzey
+    ******************************************************
+    *** Purpose: Adds the card name and number into the player preferences to be saved.
+    *** Method Inputs: None
+    *** Return value: Void
+    ******************************************************
+    *** 30 November 2015
+    ******************************************************/		
+	public void AddCard()
+	{
+		if (nameTextBox.text != "" && numTextBox.text != "") 
+		{
+			cardAddedLabel.SetActive(true);
+			cardname = nameTextBox.text;
+			cardnumber = numTextBox.text;
+			PlayerPrefs.SetString("CreditName", cardname);
+			PlayerPrefs.SetString("CreditNumber", cardnumber);
+			PlayerPrefs.Save();
+		}
+	}
+}
