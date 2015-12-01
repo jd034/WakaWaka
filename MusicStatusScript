@@ -1,0 +1,30 @@
+using UnityEngine;
+using System.Collections;
+
+public class MusicStatusScript : MonoBehaviour {
+
+	public int musicStatus = 0;
+	public AudioSource audioS;
+
+	void Start () 
+	{
+		musicStatus = PlayerPrefs.GetInt ("MusicOption");
+		if (musicStatus == 1) 
+		{
+			audioS.Stop();
+		}
+	}
+
+	void Update()
+	{
+		musicStatus = PlayerPrefs.GetInt ("MusicOption");
+		if (musicStatus == 1) {
+			audioS.Stop ();
+		} 
+		else if (audioS.isPlaying != true) 
+		{
+			audioS.Play ();
+		}
+	}
+
+}
