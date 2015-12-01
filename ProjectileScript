@@ -1,0 +1,98 @@
+using UnityEngine;
+using System.Collections;
+
+public class ProjectileScript : MonoBehaviour {
+
+	private int SFXtemp;
+	public float speed = 10;
+	public int damage;
+	public GameObject target;
+	public GameObject BossPrefab1;
+	public GameObject BossPrefab2;
+	public GameObject BossPrefab3;
+	public GameObject BossPrefab4;
+	public GameObject BossPrefab5;
+	public GameObject EnemyPrefab1;
+	public GameObject EnemyPrefab2;
+	public GameObject EnemyPrefab3;
+	public GameObject EnemyPrefab4;
+	public GameObject EnemyPrefab5;
+	public GameObject EnemyPrefab6;
+
+	public Vector3 startPosition;
+	public Vector3 targetPosition;	
+	private float distance;
+	private float startTime;	
+	private LevelManagerScript levelManager;
+	private int enemyType;
+
+	public int Damage
+	{
+		get 
+		{ 
+			return damage;
+		}
+		set 
+		{
+			damage = value;
+		}
+	}
+	
+	void Start () 
+	{
+		SFXtemp = PlayerPrefs.GetInt ("SFXOption");
+		startTime = Time.time;
+		distance = Vector3.Distance (startPosition, targetPosition);
+		GameObject gm = GameObject.Find("LevelManager");
+		levelManager = gm.GetComponent<LevelManagerScript>();
+		enemyType = 0;
+	}
+
+	void Update () 
+	{
+		float timeInterval = Time.time - startTime;
+		gameObject.transform.position = Vector3.Lerp(startPosition, targetPosition, timeInterval * speed / distance);
+		if (gameObject.transform.position.Equals(targetPosition)) 
+		{
+			if (target != null) 
+			{
+				Transform healthBarTransform = target.transform.FindChild("HealthBit");
+				HealthBar healthBar = healthBarTransform.gameObject.GetComponent<HealthBar>();
+				healthBar.currentHealth -= Mathf.Max(damage, 0);
+
+				if (healthBar.currentHealth <= 0) 
+				{
+					if(target.name == string.Format("{0}(Clone)", BossPrefab1.name) || target.name == string.Format("{0}(Clone)", BossPrefab2.name) || target.name == string.Format("{0}(Clone)", BossPrefab3.name) || target.name == string.Format("{0}(Clone)", BossPrefab4.name) || target.name == string.Format("{0}(Clone)", BossPrefab5.name))  
+					{
+						enemyType = 2;
+					}
+					else if(target.name == string.Format("{0}(Clone)", EnemyPrefab1.name) || target.name == string.Format("{0}(Clone)", EnemyPrefab2.name) || target.name == string.Format("{0}(Clone)", EnemyPrefab3.name) || target.name == string.Format("{0}(Clone)", EnemyPrefab4.name) || target.name == string.Format("{0}(Clone)", EnemyPrefab5.name) || target.name == string.Format("{0}(Clone)", EnemyPrefab6.name))
+					{
+						enemyType = 1;
+					}
+					Destroy(target);
+					if(SFXtemp == 2)
+					{
+						AudioSource audioSource = target.GetComponent<AudioSource>();
+						AudioSource.PlayClipAtPoint(audioSource.clip, transform.position);
+					}
+					if(enemyType == 2)
+					{
+						levelManager.Quarters += 1000;
+					}
+					else if(enemyType == 1)
+					{
+						levelManager.Quarters += 500;
+					}
+					else
+					{
+						levelManager.Quarters += 200;
+					}
+
+				}
+			}
+			Destroy(gameObject);
+		}
+
+	}
+}
