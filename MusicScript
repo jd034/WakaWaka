@@ -1,0 +1,51 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+public class MusicScript : MonoBehaviour {
+
+	public GameObject MusicOnActive;
+	public GameObject MusicOffActive;
+	public int MusicStatus = 2;
+	public int Musictemp;
+
+	void Start () 
+	{
+		Musictemp = PlayerPrefs.GetInt ("MusicOption");
+		if (Musictemp > 0) 
+		{
+			MusicStatus = Musictemp;
+			this.checkStatus();
+		}
+	}
+
+	private void checkStatus()
+	{
+		if (MusicStatus == 2) 
+		{
+			MusicOnActive.SetActive(true);
+			MusicOffActive.SetActive (false);
+			PlayerPrefs.SetInt("MusicOption", 2);
+		} 
+		else 
+		{
+			MusicOffActive.SetActive(true);
+			MusicOnActive.SetActive (false);
+			PlayerPrefs.SetInt("MusicOption", 1);
+		}
+	}
+
+	public void onClick(int in_value)
+	{
+		if (MusicStatus == 2 && in_value == 1) 
+		{
+			MusicStatus = 1;
+			this.checkStatus();
+		} 
+		else if(MusicStatus == 1 && in_value == 2)
+		{
+			MusicStatus = 2;
+			this.checkStatus();
+		}
+	}
+}
