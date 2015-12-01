@@ -1,0 +1,96 @@
+using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+
+public class UnitShoot : MonoBehaviour {
+
+	public List<GameObject> enemiesInRange;
+	private float lastShotTime;
+	private UnitData unitData;
+	private int SFXtemp;
+
+	void Start () 
+	{
+		SFXtemp = PlayerPrefs.GetInt ("SFXOption");
+		enemiesInRange = new List<GameObject>();
+		lastShotTime = Time.time;
+		unitData = gameObject.GetComponentInChildren<UnitData> ();
+	}
+
+	void Shoot(Collider2D target) 
+	{
+		GameObject bulletPrefab = unitData.CurrentLevel.projectile;
+		Vector3 startPosition = gameObject.transform.position;
+		Vector3 targetPosition = target.transform.position;
+		startPosition.z = bulletPrefab.transform.position.z;
+		targetPosition.z = bulletPrefab.transform.position.z;
+
+		GameObject newProjectile = (GameObject)Instantiate (bulletPrefab);
+		newProjectile.transform.position = startPosition;
+		ProjectileScript projectile1 = newProjectile.GetComponent<ProjectileScript>();
+		projectile1.Damage = unitData.CurrentLevel.damage;
+		projectile1.target = target.gameObject;
+		projectile1.startPosition = startPosition;
+		projectile1.targetPosition = targetPosition;
+
+		if (SFXtemp == 2) 
+		{
+			AudioSource audioSource = gameObject.GetComponent<AudioSource> ();
+			audioSource.PlayOneShot (audioSource.clip);
+		}
+	}
+
+
+	void OnEnemyDestroy (GameObject enemy) 
+	{
+		enemiesInRange.Remove(enemy);
+	}
+	
+	void OnTriggerEnter2D (Collider2D other) 
+	{
+		if (other.gameObject.tag.Equals("Enemy")) 
+		{
+			enemiesInRange.Add(other.gameObject);
+			EnemyKillDelegate del = other.gameObject.GetComponent<EnemyKillDelegate>();
+			del.enemyDelegate += OnEnemyDestroy;
+		}
+	}
+
+	void OnTriggerExit2D (Collider2D other) 
+	{
+		if (other.gameObject.tag.Equals("Enemy")) 
+		{
+			enemiesInRange.Remove(other.gameObject);
+			EnemyKillDelegate del =	other.gameObject.GetComponent<EnemyKillDelegate>();
+			del.enemyDelegate -= OnEnemyDestroy;
+		}
+	}
+
+	void Update()
+	{
+		GameObject target = null;
+		float minimalEnemyDistance = float.MaxValue;
+		foreach (GameObject enemy in enemiesInRange) 
+		{
+			float distanceToGoal = enemy.GetComponent<MoveEnemy>().distanceToGoal();
+			if (distanceToGoal < minimalEnemyDistance) 
+			{
+				target = enemy;
+				minimalEnemyDistance = distanceToGoal;
+			}
+		}
+		if (target != null) 
+		{
+			if (Time.time - lastShotTime > unitData.CurrentLevel.rateOfFire) 
+			{
+				Shoot(target.GetComponent<Collider2D>());
+				lastShotTime = Time.time;
+			}
+
+			Vector3 direction = gameObject.transform.position - target.transform.position;
+			gameObject.transform.rotation = Quaternion.AngleAxis(Mathf.Atan2 (direction.y, direction.x) * 180 / Mathf.PI, new Vector3 (0, 0, 1));
+		}
+
+	}
+}
