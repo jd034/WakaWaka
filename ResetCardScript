@@ -1,0 +1,25 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+public class ResetCardScript : MonoBehaviour {
+
+
+	public InputField CardName;
+	public InputField CardNumber;
+	public Text nameC;
+	public Text numberC;
+	public GameObject CardAddLabel;
+
+	public void OnResetClick()
+	{
+		PlayerPrefs.DeleteKey("CreditName");		
+		PlayerPrefs.DeleteKey("CreditNumber");
+		nameC.text = "";
+		numberC.text = "";
+		CardName.interactable = true;
+		CardNumber.interactable = true;
+		CardAddLabel.SetActive (false);
+	}
+
+}
