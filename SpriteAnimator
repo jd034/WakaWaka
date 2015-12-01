@@ -1,17 +1,62 @@
 using UnityEngine;
 using System.Collections;
 
+/**
+ ‘******************************************************
+‘***  SpriteAnimator
+‘***  Jennifer Demieville
+‘******************************************************
+‘*** Creates an array of sprite images
+***  
+‘******************************************************
+‘*** 11/28/15
+‘******************************************************
+‘*** 11/28/15 @ 16:00- created variables and start method
+11/28/15 @ 17:00- created update method
+‘******************************************************
+‘*** 
+‘*******************************************************
+
+ */
+
 public class SpriteAnimator : MonoBehaviour {
 
 	public Sprite[] array_sprites;
 	public float flt_framesPerSecond;
 	private SpriteRenderer pfv_spriteRenderer;
 	
+	/**
+ ‘******************************************************
+‘***  Start
+‘***  Jennifer Demieville
+‘******************************************************
+‘*** This is instantiating the sprite renderer
+‘*** Method Inputs: none
+*** Return value: none
+‘*******************************************************
+‘******************************************************
+‘*** 11/28/15
+‘******************************************************
+ */
 	
 	void Start () 
 	{
 		pfv_spriteRenderer = renderer as SpriteRenderer;
 	}
+	
+		/**
+ ‘******************************************************
+‘***  Update
+‘***  Jennifer Demieville
+‘******************************************************
+‘*** This takes frames per second and does a modulo to get index value of how long array is; changes current sprite image to index image of array
+‘*** Method Inputs: none
+*** Return value: none
+‘*******************************************************
+‘******************************************************
+‘*** 11/28/15
+‘******************************************************
+ */
 	
 	void Update () 
 	{
